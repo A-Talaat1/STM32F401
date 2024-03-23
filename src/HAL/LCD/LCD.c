@@ -283,7 +283,7 @@ static void LCD_Operate(void)
 }
 
 
-void LCD_Clear(LCD_Modules_t LCD_Name)
+void LCD_Clear_Async(LCD_Modules_t LCD_Name)
 {
     if (LCD_State == LCD_Operating && User_Req.State == Ready)
     {
@@ -301,7 +301,7 @@ static void LCD_CLear_proc(void)
 }
 
 
-void LCD_Set_Cursor(LCD_Modules_t LCD_Name ,u8 Row, u8 Col)
+void LCD_Set_Cursor_Async(LCD_Modules_t LCD_Name ,u8 Row, u8 Col)
 {
     if (LCD_State == LCD_Operating && User_Req.State == Ready)
     {
@@ -339,7 +339,7 @@ static void LCD_Set_Cursor_Proc(void)
 
 
 
-void LCD_Write_String(LCD_Modules_t LCD_Name ,const char *string)
+void LCD_Write_String_Async(LCD_Modules_t LCD_Name ,const char *string)
 {
 
     if (LCD_State == LCD_Operating && User_Req.State == Ready)
