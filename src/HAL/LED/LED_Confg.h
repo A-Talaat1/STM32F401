@@ -1,20 +1,16 @@
-#ifndef LED_CONFG_H_
+#ifndef LED_CONFG_H_ // Header guard to prevent multiple inclusion of the header file
 #define LED_CONFG_H_
-#include "../../lib/StdTypes.h"
-#include "../../lib/Error/Error.h"
 
+#include "../../lib/StdTypes.h" // Include standard types header file
+#include "../../lib/Error/Error.h" // Include error handling header file
 
+// Enumeration defining LED names/types
+typedef enum {
+    Green,     // Green LED
+    Yellow,   // Yellow LED 
+    Red,       // Red LED
 
-typedef enum
-{
-    Green,
-    Yelllow,
-    Red,
-    
+    LED_Number, // Total number of LEDs
+} LED_Names_t;
 
-    LED_Number,
-
-}LED_Names_t;
-
-
-#endif
+#endif // End of header guard and file

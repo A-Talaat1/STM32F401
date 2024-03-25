@@ -1,26 +1,25 @@
-#include "HAL/LED/LED.h"
-#include "HAL/LED/LED_Confg.h"
+#include "HAL/LED/LED.h" // Include LED module header file
+#include "HAL/LED/LED_Confg.h" // Include LED configuration header file
 
-const LED_Confg_t LED_Confg [LED_Number] = 
+// Array to hold LED configurations
+const LED_Confg_t LED_Confg[LED_Number] = 
 {
-    [Green] = 
+    [Green] = // Configuration for Green LED
     {
-        .Port = LED_PORT_A,
-        .Pin  = LED_PIN_0,
-        .Connection  = LED_CONNECT_FORWARD, 
-
+        .Port = LED_PORT_A, // Port A
+        .Pin  = LED_PIN_0,  // Pin 0
+        .Connection  = LED_CONNECT_FORWARD,  // Forward connection
     },
-    [Yelllow] =
+    [Yellow] = // Configuration for Yellow LED
     {
-        .Port = LED_PORT_B,
-        .Pin  = LED_PIN_1,
-        .Connection = LED_CONNECT_FORWARD,
+        .Port = LED_PORT_B, // Port B
+        .Pin  = LED_PIN_1,  // Pin 1
+        .Connection = LED_CONNECT_FORWARD, // Forward connection
     },
-    [Red] =
+    [Red] = // Configuration for Red LED
     {
-        .Port = LED_PORT_B,
-        .Pin  = LED_PIN_2,
-        .Connection = LED_CONNECT_FORWARD,
+        .Port = LED_PORT_B, // Port B
+        .Pin  = LED_PIN_2,  // Pin 2
+        .Connection = LED_CONNECT_FORWARD, // Forward connection
     },
-
 };
