@@ -25,7 +25,7 @@ void traffic(void)
         {
 
             LED_Set_State(Green,LED_ON);
-            LED_Set_State(Yelllow,LED_OFF);
+            LED_Set_State(Yellow,LED_OFF);
             LED_Set_State(Red,LED_OFF);
 
             state = y;
@@ -40,7 +40,7 @@ void traffic(void)
         {
 
             LED_Set_State(Green,LED_OFF);
-            LED_Set_State(Yelllow,LED_ON);
+            LED_Set_State(Yellow,LED_ON);
             LED_Set_State(Red,LED_OFF);
 
             state = R;
@@ -51,7 +51,7 @@ void traffic(void)
         if (s== 300 && prev == R)
         {
             LED_Set_State(Green,LED_OFF);
-            LED_Set_State(Yelllow,LED_ON);
+            LED_Set_State(Yellow,LED_ON);
             LED_Set_State(Red,LED_OFF);
             state = G;
             //prev = y;
@@ -64,7 +64,7 @@ void traffic(void)
         {
 
             LED_Set_State(Green,LED_OFF);
-            LED_Set_State(Yelllow,LED_OFF);
+            LED_Set_State(Yellow,LED_OFF);
             LED_Set_State(Red,LED_ON);
 
             state=y;
