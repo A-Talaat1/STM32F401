@@ -48,6 +48,25 @@
 #define GPIO_CONFG_AF_PP_PU       0x0000000E // Define GPIO alternative function push-pull with pull-up mode
 #define GPIO_CONFG_AF_PP_PD       0x0000000F // Define GPIO alternative function push-pull with pull-down mode
 
+/*Alternative Functions*/
+#define GPIO_AF00         (0UL)
+#define GPIO_AF01         (1UL)
+#define GPIO_AF02         (2UL)
+#define GPIO_AF03         (3UL)
+#define GPIO_AF04         (4UL)
+#define GPIO_AF05         (5UL)
+#define GPIO_AF06         (6UL)
+#define GPIO_AF07         (7UL)
+#define GPIO_AF08         (8UL)
+#define GPIO_AF09         (9UL)
+#define GPIO_AF10         (10UL)
+#define GPIO_AF11         (11UL)
+#define GPIO_AF12         (12UL)
+#define GPIO_AF13         (13UL)
+#define GPIO_AF14         (14UL)
+#define GPIO_AF15         (15UL)
+#define GPIO_AF_DISABLED  (16UL)
+
 /* PIN SPEED */
 
 #define GPIO_PIN_LOW_SPEED   0xFFFFFFFF // Define GPIO pin low speed
@@ -65,6 +84,7 @@ typedef struct
     u32 pin;    // GPIO pin
     u32 speed;  // GPIO pin speed
     u32 mode;   // GPIO pin mode
+    u32 AF;
 } GPIO_Pin_Confg_t; // Structure to hold GPIO pin configuration
 
 /* Function prototypes */

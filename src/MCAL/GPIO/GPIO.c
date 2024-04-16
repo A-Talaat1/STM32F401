@@ -18,6 +18,8 @@
 
 #define GPIO_BSRR_MASK 0x00000010
 
+#define GPIO_4_BIT_MASK    0x0000000FUL
+
 typedef struct
 {
 
@@ -39,12 +41,12 @@ typedef struct
     u32 GPIO_ODR;
     u32 GPIO_BSRR;
     u32 GPIO_LCKR;
-    u32 GPIO_AFRL;
-    u32 GPIO_AFRH;
+    u32 AFRL;
+    u32 AFRH;
 
 }GPIO_Registers_t;
 
-static volatile GPIO_Registers_t * const GPIO [3] = {(GPIO_Registers_t *)GPIO_PORT_A_BASE_ADDRESS,(GPIO_Registers_t *)GPIO_PORT_B_BASE_ADDRESS,(GPIO_Registers_t *)GPIO_PORT_C_BASE_ADDRESS};
+static volatile GPIO_Registers_t * const GPIO [3] = {(volatile GPIO_Registers_t *const)GPIO_PORT_A_BASE_ADDRESS,(volatile GPIO_Registers_t *const)GPIO_PORT_B_BASE_ADDRESS,(volatile GPIO_Registers_t *const)GPIO_PORT_C_BASE_ADDRESS};
 
 /*STATIC FUNCTIONS*/
 static Masks_t Generate_Mask (u32 config, u32 pin);
@@ -78,6 +80,26 @@ Error_t GPIO_Init_Pin (GPIO_Pin_Confg_t * Pin_Config)
     Temp_Reg &= (~(0x00000003)<<(Pin_Config->pin*2));
     Temp_Reg |= (Pin_Config->speed << (Pin_Config->pin*2));
     GPIO[Pin_Config->port]->GPIO_OSPEEDR = Temp_Reg; 
+
+    /*AF*/
+    u32 AF_Pin = Pin_Config->pin % 8;
+    if (Pin_Config->pin > 7)
+    {
+        Temp_Reg  = GPIO[Pin_Config->port]->AFRH;
+        Temp_Reg &= (~((GPIO_4_BIT_MASK) << (AF_Pin * 4)));
+        Temp_Reg |= (Pin_Config->AF << (AF_Pin*4));
+        GPIO[Pin_Config->port]->AFRH = Temp_Reg;
+    }
+    else
+    {
+        Temp_Reg  = GPIO[Pin_Config->port]->AFRL;
+        Temp_Reg &= (~(GPIO_4_BIT_MASK) << (Pin_Config->pin * 4));
+        Temp_Reg |= (Pin_Config->AF << (AF_Pin*4));
+        GPIO[Pin_Config->port]->AFRL = Temp_Reg;
+    }
+    
+    
+    
 
     return Error;
 }
