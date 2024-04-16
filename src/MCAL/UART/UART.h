@@ -64,12 +64,19 @@ typedef struct
 
 Error_t UART_Init(UART_Confg_t *UART_CONFIG);
 
-Error_t UART_TX_Byte(u8 Byte);
+Error_t UART_TX_Byte(u8 UART_Peri, u8 Byte);
 
-Error_t UART_RX_Byte(u8 Byte);
+Error_t UART_RX_Byte(u8 UART_Peri, u8 *Byte);
 
 Error_t UART_TX_Buffer_Async_ZC(u8 UART_ID, u8 *Buffer, u32 Length, CB_t CB);
 
 Error_t UART_RX_Buffer_Async_ZC(u8 UART_ID, u8 *Buffer, u32 Length, CB_t CB);
+
+/*Extra*/
+u8 UART_IS_DR_Empty(void);
+
+u8 UART_IS_TX_Complete(void);
+
+/*Get States*/
 
 #endif /*UART_H_*/

@@ -7,6 +7,16 @@
 #define UART_TWO_BASE_ADDRESS 0x40004400UL
 #define UART_SIX_BASE_ADDRESS 0x40011400UL
 
+/*UART Enable*/
+#define UART_PERI_ENABLE 0x00002000UL
+#define UART_TX_ENABLE   0x00000008UL
+#define UART_RX_ENABLE   0x00000004UL
+
+/*Masks*/
+#define UART_GET_TXE_MASK  0x00000080
+#define UART_GET_TC_MASK   0x00000040
+#define UART_GET_RXNE_MASK 0x00000020
+
 typedef struct
 {
 
@@ -20,9 +30,11 @@ typedef struct
 
 }UART_Registers_t;
 
-static volatile UART_Registers_t * const UART[UART_NUMBER_OF_PERIPHERALS] = { ((volatile UART_Registers_t * const )UART_ONE_BASE_ADDRESS),
-                                                                              ((volatile UART_Registers_t * const )UART_TWO_BASE_ADDRESS),
-                                                                              ((volatile UART_Registers_t * const )UART_SIX_BASE_ADDRESS) };
+
+static volatile UART_Registers_t * const UART [3] = { (volatile UART_Registers_t * const )UART_ONE_BASE_ADDRESS,
+                                                      (volatile UART_Registers_t * const )UART_TWO_BASE_ADDRESS,
+                                                      (volatile UART_Registers_t * const )UART_SIX_BASE_ADDRESS 
+                                                    };
 
 
 /*Static APIs*/
@@ -32,13 +44,18 @@ static u32 Round_Float(float Float_Number);
 
 Error_t UART_Init(UART_Confg_t *UART_CONFIG)
 {
+    Error_t Error = ERROR_Ok;
+   
     u32 Temp_BRR = UART[UART_CONFIG->UART_ID]->BRR;
     u32 Temp_CR1 = UART[UART_CONFIG->UART_ID]->CR1;
     u32 Temp_CR2 = UART[UART_CONFIG->UART_ID]->CR2;
     u32 Temp_CR3 = UART[UART_CONFIG->UART_ID]->CR3;
 
-    Temp_BRR = Calc_Baud_Rate(UART_CONFIG->Baud_Rate, UART_CONFIG->Over_Sampling);
+    Temp_BRR |= Calc_Baud_Rate(UART_CONFIG->Baud_Rate, UART_CONFIG->Over_Sampling);
 
+    Temp_CR1 |= UART_PERI_ENABLE;
+    Temp_CR1 |= UART_TX_ENABLE;
+    Temp_CR1 |= UART_RX_ENABLE;
     Temp_CR1 |= UART_CONFIG->Byte_Length;
     Temp_CR1 |= UART_CONFIG->Parity_Enable;
     Temp_CR1 |= UART_CONFIG->Parity_Type;
@@ -53,14 +70,57 @@ Error_t UART_Init(UART_Confg_t *UART_CONFIG)
     UART[UART_CONFIG->UART_ID]->CR2 = Temp_CR2;
     UART[UART_CONFIG->UART_ID]->CR3 = Temp_CR3;
 
+    return Error;
 }
+
+Error_t UART_TX_Byte(u8 UART_Peri, u8 Byte)
+{
+    Error_t Error = ERROR_Ok;
+
+    u8 TXE = UART[UART_Peri]->SR & UART_GET_TXE_MASK;
+    
+    if (TXE)
+    {
+        UART[UART_Peri]->DR = Byte;
+    }
+    else
+    {
+        Error = ERROR_Nok;
+    }
+    
+    return Error;
+    
+}
+
+Error_t UART_RX_Byte(u8 UART_Peri, u8 *Byte)
+{
+    Error_t Error;
+
+    u8 RXNE = UART[UART_Peri]->CR1 & UART_GET_RXNE_MASK;
+
+    if (RXNE)
+    {
+        *Byte = UART[UART_Peri]->DR;
+    }
+    else
+    {
+        Error = ERROR_Nok;
+    }
+    
+    return Error;
+
+}
+
+
 
 static u32 Calc_Baud_Rate(u16 Baud_Rate, u8 Over_Sampling)
 {
-    u32 Result;
-    u32 Div_Mantissa;
-    u8  Div_Fraction, Sample;
-    float Fraction, Temp_Div;
+    volatile u32 Result = 0;
+    volatile u32 Div_Mantissa = 0;
+    volatile u8  Div_Fraction = 0;
+    volatile u8  Sample = 0;
+    volatile float Fraction = 0;
+    volatile float Temp_Div = 0;
 
     if (Over_Sampling)
     {
@@ -90,17 +150,20 @@ static u32 Calc_Baud_Rate(u16 Baud_Rate, u8 Over_Sampling)
 
 static u32 Round_Float(float Float_Number)
 {
-    float fraction;
-    u8 Addition = 0;
+    return (u32)(Float_Number + 0.5);   
+}
 
-    fraction = Float_Number - (u32) Float_Number;
+void USART1_IRQHandler(void)
+{
 
-    if (fraction >= 0.5)
-    {
-        Addition = 1;
+}
 
-    }
+void USART2_IRQHandler(void)
+{
+    
+}
 
-    return ( (u32) Float_Number + Addition);
+void USART6_IRQHandler(void)
+{
     
 }
